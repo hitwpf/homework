@@ -1,0 +1,19 @@
+1、电影知识库IMDB可以用于查询检索电影资源，并且有相应的py工具可以使用IMDbPY
+安装方式：pip install IMDbPY，目前只支持python3
+
+2、可以利用DBpedia库进行电影资源检索
+测试地址：http://dbpedia.org/sparql
+测试语句：
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix dbpedia-owl: <http://dbpedia.org/ontology/>
+prefix movie: <http://data.linkedmdb.org/resource/movie/>
+
+select distinct ?film where  {
+  { ?film a movie:film       } union 
+  { ?film a dbpedia-owl:Film }
+  ?film rdfs:label ?label .
+  filter regex( str(?label), "The Magician", "i")
+}
+limit 10
+
+数据样例：http://dbpedia.org/page/The_Magician_(1898_film)
