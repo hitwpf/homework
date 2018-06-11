@@ -1,0 +1,6 @@
+1、环境配置：https://www.cnblogs.com/hwtmhj/p/6746151.html
+    若pycharm初始化Django工程报错：
+    buteError: module 'pip' has no attribute 'main'
+    解决方法：https://zhidao.baidu.com/question/1738175020509032387.html
+
+2、Django 教程：http://www.runoob.com/django/django-install.html
