@@ -82,11 +82,52 @@
             font-size: 13px;
             color: #F9F0DA;
         }
+		
+		.background { 
+			background: #000;
+			filter: alpha(opacity=50); /* IE的透明度 */
+			opacity: 0.5; /* 透明度 */
+			display: none;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+			z-index: 100; /* 此处的图层要大于页面 */
+			display:none;
+			_background-color:#a0a0a0; /* 解决IE6的不透明问题 */
+		} 
+		
+		.progressBar { 
+			border: solid 2px #86A5AD;
+			background: white url(http://www.jq22.com/demo/loading-150205212537/loading.gif) no-repeat 15px 15px; 
+		}
+		
+		.progressBar { 
+			display: block; 
+			width: 200px; 
+			height: 28px; 
+			position: fixed; 
+			top: 50%; 
+			left: 40%; 
+			padding: 10px 10px 10px 40px; 
+			text-align: left; 
+			line-height: 27px; 
+			font-weight: bold; 
+			z-index: 2001;
+			font-size: 0.6em;
+			margin: auto;
+		}
+		
+		.w{cursor:pointer}
     </style>
     <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
 <body>
 <div id='container'>
+    <div id="background" class="background" style="display: none;"></div> 
+    <div id="progressBar" class="progressBar" style="display:none;">数据加载中，请稍等...</div>
+	
     <div class="search bar6">
         <form onsubmit="return search()">
             <input type="text" placeholder="请输入您要搜索的电影..." id="name"/>
@@ -119,11 +160,11 @@
         <table id='second' style="display:none;">
             <th id="title" align="left">为您推荐:</th>
             <tr>
-                <td class="s-td-1"><img id="f0"></img></td>
-                <td class="s-td-1"><img id="f1"></img></td>
-                <td class="s-td-1"><img id="f2"></img></td>
-                <td class="s-td-1"><img id="f3"></img></td>
-                <td class="s-td-1"><img id="f4"></img></td>
+                <td class="s-td-1"><img class="w" id="f0" onclick='redirect("f0-t")'></img></td>
+                <td class="s-td-1"><img class="w" id="f1" onclick='redirect("f1-t")'></img></td>
+                <td class="s-td-1"><img class="w" id="f2" onclick='redirect("f2-t")'></img></td>
+                <td class="s-td-1"><img class="w" id="f3" onclick='redirect("f3-t")'></img></td>
+                <td class="s-td-1"><img class="w" id="f4" onclick='redirect("f4-t")'></img></td>
             </tr>
             <tr>
                 <td class="s-td-2"><p id="f0-t">死神</p></td>
@@ -136,6 +177,7 @@
     </div>
 </div>
 <script>
+	var ajaxbg = $("#background,#progressBar"); 
     $.ajax({
         url: "/top",
         dataType: 'json',
@@ -150,13 +192,9 @@
             }
         }
     })
-
-    function search() {
-        var title = document.getElementById('name').value
-        if (title == '') {
-            alert("查询内容不可为空！")
-            return false;
-        }
+	
+	function lookup(title){
+		ajaxbg.show();
         $.ajax({
             url: "/lookup",
             dataType: 'json',
@@ -164,6 +202,7 @@
                 'title': title
             },
             success: function (res) {
+			    ajaxbg.hide();
                 if (res.code == 0) {
                     var item = res['data'][0]
                     for (var key in item) {
@@ -180,10 +219,30 @@
                     }
                     $('#first').show()
                 } else {
-                    alert("抱歉为查到该影片")
+                    alert("抱歉为查到该影片！")
                 }
-            }
+            },
+			error: function(){
+				ajaxbg.hide();
+				alert("访问超时,请重新尝试！");
+			}
         });
+	}
+	
+	function redirect(key){
+		var title = document.getElementById(key).innerText;
+		if(title != "" && title != "undefine"){
+			lookup(title);
+		}
+	}
+
+    function search() {
+        var title = document.getElementById('name').value
+        if (title == '') {
+            alert("查询内容不可为空！")
+            return false;
+        }
+		lookup(title);
         return false;
     }
 </script>
