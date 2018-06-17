@@ -22,10 +22,13 @@ class movieSearch:
             person = cls.__obj.get_person_filmography(personId)
             filmGraphs = person["data"]["filmography"][0]
             if filmGraphs.__contains__('actor'):
+                # 演员,扮演过的作品
                 filmGraphs = filmGraphs['actor']
             elif filmGraphs.__contains__('writer'):
+                # 编剧,编辑过的作品
                 filmGraphs = filmGraphs['writer']
             else:
+                # 导演,导演过的作品
                 filmGraphs = filmGraphs['director']
             count = 0
             for film in filmGraphs:
@@ -38,6 +41,7 @@ class movieSearch:
                 count += 1
         temp = []
         count = 0
+        # 按评价排序,取前5个
         for movieId in movieIds:
             if movieId == movies[0].movieID:
                 continue
@@ -45,22 +49,23 @@ class movieSearch:
             film = cls.__fill(movie)
             if film is None:
                 continue
-            temp.append(film)
             if count == 5:
                 rating = float(film.rating)
                 for i in range(5):
                     if rating > float(temp[i].rating):
                         temp[i] = film
+            else:
+                temp.append(film)
             count += 1
         result.extend(temp)
         return result
 
     @classmethod
     def search_2(cls):
-        # 推荐top10
+        # 推荐top5
         movies = cls.__obj.get_top250_movies()
         result = []
-        count = min(10, len(movies))
+        count = min(5, len(movies))
         for i in range(count):
             movieId = movies[i].movieID
             movie = cls.__obj.get_movie(movieId)

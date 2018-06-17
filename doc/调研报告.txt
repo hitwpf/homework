@@ -18,6 +18,9 @@ limit 10
 
 数据样例：http://dbpedia.org/page/The_Magician_(1898_film)
 
+3、IMDbPY接口说明：
+
+我们用到的描述属性：
 cast           演员表
 genres       风格
 runtimes    电影时长
@@ -31,7 +34,7 @@ director   导演
 long imdb title  电影名称，展示用
 
 
-
+电影对象总的描述属性：
 cast
 genres
 runtimes
