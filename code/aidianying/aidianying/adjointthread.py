@@ -3,7 +3,7 @@ from time import sleep
 from .mvsearch import movieSearch
 from .localCache import localCache
 
-
+# 伴随线程，主要是提供异步拉取数据功能，内置有任务队列
 class DaemonThread(threading.Thread):
     def __init__(self):
         super(DaemonThread, self).__init__()

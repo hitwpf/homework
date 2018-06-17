@@ -93,7 +93,7 @@
 			left: 0px;
 			width: 100%;
 			height: 100%;
-			z-index: 100; /* 此处的图层要大于页面 */
+			z-index: 200; /* 此处的图层要大于页面 */
 			display:none;
 			_background-color:#a0a0a0; /* 解决IE6的不透明问题 */
 		} 
@@ -195,6 +195,8 @@
 	
 	function lookup(title){
 		ajaxbg.show();
+		$('body').css('overflow','hidden');
+		window.scrollTo(0,0); 
         $.ajax({
             url: "/lookup",
             dataType: 'json',
@@ -203,6 +205,7 @@
             },
             success: function (res) {
 			    ajaxbg.hide();
+				$('body').css('overflow','auto');
                 if (res.code == 0) {
                     var item = res['data'][0]
                     for (var key in item) {
@@ -224,6 +227,7 @@
             },
 			error: function(){
 				ajaxbg.hide();
+				$('body').css('overflow','auto');
 				alert("访问超时,请重新尝试！");
 			}
         });

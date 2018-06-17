@@ -71,7 +71,7 @@ class movieSearch:
     def __fill(film):
         try:
             movie = Film()
-            movie.title = film["long imdb title"]
+            movie.title = film["title"]
             movie.coverUrl = film["cover url"]
             movie.genres = film["genres"]
             movie.actors = movieSearch.parsePerson(film["cast"])
