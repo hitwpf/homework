@@ -17,3 +17,75 @@ select distinct ?film where  {
 limit 10
 
 数据样例：http://dbpedia.org/page/The_Magician_(1898_film)
+
+cast           演员表
+genres       风格
+runtimes    电影时长
+original air date  首次上映时间
+rating     评分
+cover url  封面网址
+plot outline   情节大纲
+languages     语言
+countries  发行国家
+director   导演
+long imdb title  电影名称，展示用
+
+
+
+cast
+genres
+runtimes
+countries
+country codes
+language codes
+color info
+aspect ratio
+sound mix
+certificates
+original air date
+rating
+votes
+cover url
+plot outline
+languages
+title
+year
+kind
+directors
+writers
+producers
+composers
+cinematographers
+editors
+editorial department
+casting directors
+production designers
+art directors
+set decorators
+costume designers
+make up department
+production managers 
+assistant directors
+art department
+sound department
+special effects
+visual effects
+stunts
+camera department
+casting department
+costume departmen
+location management
+music department
+transportation department
+miscellaneous
+akas
+writer
+director
+plot
+synopsis
+canonical title
+long imdb title
+long imdb canonical title
+smart canonical title
+smart long imdb canonical title
+full-size cover url

@@ -1,0 +1,191 @@
+<html>
+<head>
+    <style type="text/css">
+        p {
+            font-family: Arial;
+            font-size: 0.5em;
+        }
+
+        td, th {
+            padding: 10px;
+        }
+
+        span {
+            font-family: Arial;
+            font-size: 0.45em;
+        }
+
+        table {
+            margin: auto;
+        }
+
+        form {
+            position: relative;
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        input, button {
+            border: none;
+            outline: none;
+        }
+
+        input {
+            width: 100%;
+            height: 42px;
+            padding-left: 13px;
+        }
+
+        button {
+            height: 42px;
+            width: 100px;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        #result {
+            text-align: center;
+        }
+
+        .s-td-1 {
+            width: 120px;
+            height: 80px;
+        }
+
+        .s-td-2 {
+            width: 120px;
+            height: 20px;
+        }
+
+        .bar6 {
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .bar6 input {
+            border: 2px solid #c5464a;
+            border-radius: 5px;
+            background: transparent;
+            top: 0;
+            right: 0;
+        }
+
+        .bar6 button {
+            background: #c5464a;
+            border-radius: 0 5px 5px 0;
+            top: 0;
+            right: 0;
+        }
+
+        .bar6 button:before {
+            content: "搜索";
+            font-size: 13px;
+            color: #F9F0DA;
+        }
+    </style>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+<div id='container'>
+    <div class="search bar6">
+        <form onsubmit="return search()">
+            <input type="text" placeholder="请输入您要搜索的电影..." id="name"/>
+            <button type="submit"></button>
+        </form>
+    </div>
+    <br/>
+    <div id='result'>
+        <table id='first' style="display:none;width:650px;height:320px;">
+            <tr>
+                <td><img id="s0" style="height:300px;"></img>
+                </td>
+                <td>
+                    <p>片名:<span id="title"></span>&nbsp;&nbsp;&nbsp;评分:<span id="rating"></span></p>
+                    <p>上映时间:<span id="originalAirDate"></span></p>
+                    <p>主演:<span id="actors"></span></p>
+                    <p>导演:<span id="director"></span></p>
+                    <p>语言:<span id="languages"></span></p>
+                    <p>时长:<span id="runTimes"></span></p>
+                    <p>类型:<span id="genres"></span></p>
+                    <p>国家:<span id="countries"></span></p>
+                    <p>简介:<span id="plotOutline"></span></p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br/>
+    <br/>
+    <div id='recommend'>
+        <table id='second' style="display:none;">
+            <th id="title" align="left">为您推荐:</th>
+            <tr>
+                <td class="s-td-1"><img id="f0"></img></td>
+                <td class="s-td-1"><img id="f1"></img></td>
+                <td class="s-td-1"><img id="f2"></img></td>
+                <td class="s-td-1"><img id="f3"></img></td>
+                <td class="s-td-1"><img id="f4"></img></td>
+            </tr>
+            <tr>
+                <td class="s-td-2"><p id="f0-t">死神</p></td>
+                <td class="s-td-2"><p id="f1-t">死神</p></td>
+                <td class="s-td-2"><p id="f2-t">死神</p></td>
+                <td class="s-td-2"><p id="f3-t">死神</p></td>
+                <td class="s-td-2"><p id="f4-t">死神</p></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    $.ajax({
+        url: "/top",
+        dataType: 'json',
+        success: function (res) {
+            if (res.code == 0) {
+                for (var i = 0; i < 5; i++) {
+                    var item = res['data'][i]
+                    document.getElementById('f' + i).src = item['pic']
+                    document.getElementById('f' + i + '-t').innerText = item['title']
+                }
+                $('#second').show()
+            }
+        }
+    })
+
+    function search() {
+        var title = document.getElementById('name').value
+        if (title == '') {
+            alert("查询内容不可为空！")
+            return false;
+        }
+        $.ajax({
+            url: "/lookup",
+            dataType: 'json',
+            data: {
+                'title': title
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    var item = res['data'][0]
+                    for (var key in item) {
+                        if (key == 'coverUrl') {
+                            document.getElementById('s0').src = item['coverUrl']
+                        } else {
+                            document.getElementById(key).innerText = item[key]
+                        }
+                    }
+                    for (var i = 0; i < 5; i++) {
+                        var item = res['data'][i + 1]
+                        document.getElementById('f' + i).src = item['coverUrl']
+                        document.getElementById('f' + i + '-t').innerText = item['title']
+                    }
+                    $('#first').show()
+                } else {
+                    alert("抱歉为查到该影片")
+                }
+            }
+        });
+        return false;
+    }
+</script>
+</body>
+</html>
