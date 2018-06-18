@@ -18,25 +18,26 @@ class localCache:
             for key in cls.__cache.keys():
                 del cls.__cache[key]
         cls.__cache[key] = value
-        if key == 1:
-            cls.persistent(value, key)
+        cls.persistent(value, key)
 
     @classmethod
     def get(cls, key):
         if cls.__cache.__contains__(key):
             return cls.__cache[key]
-        if key == 1:
-            result = cls.getPersistent(key)
-            if result is not None:
-                cls.add(key, result)
-                return result
+        result = cls.getPersistent(key)
+        if result is not None:
+            cls.add(key, result)
+            return result
         return None
 
     @classmethod
     def persistent(cls, obj, key):
         hl = hashlib.md5()
         hl.update(str(key).encode(encoding='utf-8'))
-        f = open(os.path.abspath('.') + "/temp/" + hl.hexdigest() + ".dat", "wb")
+        path = os.path.abspath('.') + "/temp/" + hl.hexdigest() + ".dat"
+        if os.path.exists(path):
+            return
+        f = open(path, "wb")
         pickle.dump(obj, f)
         f.close()
 

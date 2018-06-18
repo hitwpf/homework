@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from .localCache import localCache
 from .mvsearch import movieSearch
 from .adjointthread import DaemonThread
+import random
 
 # 伴随线程
 daemonThread = DaemonThread()
@@ -29,16 +30,17 @@ def top(request):
     """
     首次进入页面，默认推送top5给用户
     """
-    first = localCache.get(1)
+    index = random.randint(0, 10)
+    first = localCache.get(index)
     if first is None:
-        first = movieSearch.search_2()
+        first = movieSearch.search_2(index)
         if first is not None:
             data = []
             for film in first:
                 temp = {'pic': film.coverUrl, 'title': film.title}
                 data.append(temp)
             first = data
-            localCache.add(1, first)
+            localCache.add(index, first)
     result = {'code': -1}
     if first is not None:
         result['code'] = 0

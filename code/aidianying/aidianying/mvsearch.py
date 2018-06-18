@@ -10,8 +10,10 @@ class movieSearch:
         movies = cls.__obj.search_movie(title, 2)
         result = []
         movie = cls.__obj.get_movie(movies[0].movieID)
-        result.append(cls.__fill(movie))
-        temp = result[0]
+        temp = cls.__fill(movie)
+        if temp is None:
+            return None
+        result.append(temp)
         persons = []
         count = min(3, len(temp.actors))
         for i in range(count):
@@ -61,15 +63,26 @@ class movieSearch:
         return result
 
     @classmethod
-    def search_2(cls):
+    def search_2(cls, start):
         # 推荐top5
         movies = cls.__obj.get_top250_movies()
         result = []
-        count = min(5, len(movies))
+        count = len(movies)
+        if count - start < 5:
+            start = max(count - 5, 0)
+        c = 0
         for i in range(count):
+            if i < start:
+                continue
+            if i - start - c > 4:
+                break
             movieId = movies[i].movieID
             movie = cls.__obj.get_movie(movieId)
-            result.append(cls.__fill(movie))
+            film = cls.__fill(movie)
+            if film is None:
+                c += 1
+            else:
+                result.append(film)
         return result
 
     @staticmethod
